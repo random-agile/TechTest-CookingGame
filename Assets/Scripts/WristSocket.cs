@@ -3,34 +3,47 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class WristSocket : XRSocketInteractor
+public class WristSocket : MonoBehaviour
 {
+    [SerializeField] private float offsetY;
+    private XRGrabInteractable socketedInteractable;
 
-    // Is the socket active, and object is being held by different interactor
-    public override bool isSelectActive => base.isSelectActive;
-
-    public override XRBaseInteractable.MovementType? selectedInteractableMovementTypeOverride
+    /// <summary>
+    /// Attach the XRGrabInteratable in the center (+offset) of the socket. Also Disable Rigidbody and collider
+    /// </summary>
+    /// <param name="_objectToAttach">The XRGrabInteractable to attach</param>
+    private void Attach(XRGrabInteractable _objectToAttach)
     {
-        // Move while ignoring physics, and no smoothing
-        get { return XRBaseInteractable.MovementType.Instantaneous; }
+        Debug.Log($"Attach {_objectToAttach}");
+        socketedInteractable = _objectToAttach;
+        socketedInteractable.attachTransform = transform;
+        socketedInteractable.transform.position = transform.position + offsetY * transform.up;
+        socketedInteractable.GetComponent<Rigidbody>().useGravity = false;
+        socketedInteractable.GetComponent<Rigidbody>().isKinematic = true;
     }
 
-    protected override void OnHoverEntering(XRBaseInteractable interactable)
+    private void Release()
     {
-
-    }
-    protected override void OnHoverExiting(XRBaseInteractable interactable)
-    {
-
-    }
-
-    protected override void OnSelectEntering(XRBaseInteractable interactable)
-    {
-
+        Debug.Log($"Release {socketedInteractable}");
+        socketedInteractable.attachTransform = null;
+        socketedInteractable.GetComponent<Rigidbody>().useGravity = true;
+        socketedInteractable.GetComponent<Rigidbody>().isKinematic = false;
+        socketedInteractable = null;
     }
 
-    protected override void OnSelectExiting(XRBaseInteractable interactable)
+    private void OnTriggerEnter(Collider _other)
     {
+        socketedInteractable = _other.GetComponentInParent<XRGrabInteractable>();
+        if (socketedInteractable != null)
+            Attach(socketedInteractable);
+    }
 
+
+    protected void OnTriggerExit(Collider _other)
+    {
+        if (_other.GetComponentInParent<XRGrabInteractable>() == socketedInteractable)
+        {
+            Release();
+        }
     }
 }
