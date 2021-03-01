@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 using DG.Tweening;
 
 [RequireComponent(typeof(SphereCollider))]
@@ -79,15 +77,16 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Hand"))
-            OpenInventory();
+	    if (other.CompareTag("Hand"))
+		    OpenInventory();
     }
 
-    private void OnTriggerEnter(Collider other)
+	private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Hand"))
             CloseInventory();
     }
+
 }
