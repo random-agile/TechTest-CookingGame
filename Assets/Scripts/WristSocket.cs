@@ -6,16 +6,19 @@ public class WristSocket : MonoBehaviour
 {
     [SerializeField] private float offsetY;
     private XRGrabInteractable socketedInteractable;
+    private Vector3 baseScale;
+    const float scaleMultiplier = 0.5f; // scale to apply on inventory objects
 
-    /// <summary>
-    /// Attach the XRGrabInteratable in the center (+offset) of the socket. Also makes the Rigidbody kinematic
-    /// </summary>
-    /// <param name="_objectToAttach">The XRGrabInteractable to attach</param>
-    private void Attach(XRGrabInteractable _objectToAttach)
+	/// <summary>
+	/// Attach the XRGrabInteratable in the center (+offset) of the socket. Also makes the Rigidbody kinematic
+	/// </summary>
+	/// <param name="_objectToAttach">The XRGrabInteractable to attach</param>
+	private void Attach(XRGrabInteractable _objectToAttach)
     {
         Debug.Log($"Attach {_objectToAttach}");
 	    socketedInteractable = _objectToAttach;
-
+	    baseScale = socketedInteractable.transform.localScale;
+	    socketedInteractable.transform.localScale *= scaleMultiplier;
 		// since XRGrabInteractable modifies the rigidbodies after grab event we must modify the rb after it
 		socketedInteractable.onSelectExited.AddListener(_ =>
 		{
@@ -48,7 +51,7 @@ public class WristSocket : MonoBehaviour
     {
         Debug.Log($"Release {socketedInteractable}");
 		socketedInteractable.onSelectEntered.RemoveAllListeners();
-
+		socketedInteractable.transform.localScale = baseScale;
 		var detachedInteractable = socketedInteractable; // used for lambda capture
 		// same as above
 		socketedInteractable.onSelectExited.AddListener(_ =>
