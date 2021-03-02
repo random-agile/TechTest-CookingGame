@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class WristSocket : MonoBehaviour
@@ -14,37 +15,64 @@ public class WristSocket : MonoBehaviour
     {
         Debug.Log($"Attach {_objectToAttach}");
 	    socketedInteractable = _objectToAttach;
-		
-	    // force drop the holdedObject
-		//socketedInteractable.onSelectExited?.Invoke(socketedInteractable.selectingInteractor);
 
+		// since XRGrabInteractable modifies the rigidbodies after grab event we must modify the rb after it
+		socketedInteractable.onSelectExited.AddListener(_ =>
+		{
+			Debug.Log("Select exit Attach");
+			var rb = socketedInteractable.GetComponent<Rigidbody>();
+			rb.useGravity = false;
+			rb.isKinematic = true;
+			socketedInteractable.transform.parent = transform;
+			socketedInteractable.onSelectExited.RemoveAllListeners();
+		});
+
+		// force drop the holdedObject and don't allow regrab it with the same input
+		socketedInteractable.selectingInteractor.allowSelect = false;
+		StartCoroutine(AllowSelect(socketedInteractable.selectingInteractor));
+		
+		socketedInteractable.retainTransformParent = false;
 		socketedInteractable.attachTransform = transform;
 		socketedInteractable.transform.position = transform.position + offsetY * transform.up;
-		socketedInteractable.transform.parent = transform;
-		var rb = socketedInteractable.GetComponent<Rigidbody>();
-		rb.useGravity = false;
-		rb.isKinematic = true;
+
 		socketedInteractable.onSelectEntered.AddListener(_ => Release());
 	}
 
-    private void Release() 
+    IEnumerator AllowSelect(XRBaseInteractor interactor)
+    {
+		yield return new WaitForEndOfFrame();
+		interactor.allowSelect = true;
+    }
+
+	private void Release() 
     {
         Debug.Log($"Release {socketedInteractable}");
-        socketedInteractable.transform.parent = null;
 		socketedInteractable.onSelectEntered.RemoveAllListeners();
-		socketedInteractable.attachTransform = null;
-        socketedInteractable.GetComponent<Rigidbody>().useGravity = true;
-        socketedInteractable.GetComponent<Rigidbody>().isKinematic = false;
-        socketedInteractable = null;
-    }
+
+		var detachedInteractable = socketedInteractable; // used for lambda capture
+		// same as above
+		socketedInteractable.onSelectExited.AddListener(_ =>
+		{
+			Debug.Log("Select exit Release");
+			var rb = detachedInteractable.GetComponent<Rigidbody>();
+			rb.useGravity = true;
+			rb.isKinematic = false;
+			detachedInteractable.transform.parent = null;
+			detachedInteractable.attachTransform = null;
+			detachedInteractable.onSelectExited.RemoveAllListeners();
+		});
+	    socketedInteractable = null;
+	}
 
 	private void OnTriggerEnter(Collider _other)
     {
 	    var interactable = _other.GetComponentInParent<XRGrabInteractable>();
-        if (interactable != null &&
-			interactable.selectingInteractor != null && // if is grabbed 
-            interactable.attachTransform == null)		// if not already attached
+	    if (interactable != null &&
+	        interactable.selectingInteractor != null && // if is grabbed 
+	        interactable.attachTransform == null) // if not already attached
+	    {
             Attach(interactable);
+	    }
     }
 
 }

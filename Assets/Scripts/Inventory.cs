@@ -15,8 +15,11 @@ public class Inventory : MonoBehaviour
     private List<GameObject> objectList = new List<GameObject>();
     private List<GameObject> sockets = new List<GameObject>();
     private List<Vector3> socketsPos = new List<Vector3>();
+    private bool isInventoryOpen = false;
 
-    private void Start()
+    const float animDuration = 0.5f;
+
+	private void Start()
     {
         GetAllPointsOnCircle(numberOfSockets, radius);
     }
@@ -49,35 +52,41 @@ public class Inventory : MonoBehaviour
             sockets.Add(socket);
             socketsPos.Add(pos);
         }
-
     }
 
     [ContextMenu("Open Inventory")]
     private void OpenInventory()
     {
+		if (isInventoryOpen)
+			return;
+
+	    Debug.Log("Open inventory");
         for (int i = 0; i < sockets.Count; i++)
         {
             sockets[i].SetActive(true);
-            sockets[i].transform.DOScale(1.0f, 0.5f);
-            sockets[i].transform.DOLocalMove(socketsPos[i], 0.5f);
+            sockets[i].transform.DOScale(1.0f, animDuration);
+            sockets[i].transform.DOLocalMove(socketsPos[i], animDuration);
         }
+        isInventoryOpen = true;
     }
 
     [ContextMenu("Close Inventory")]
     private void CloseInventory()
     {
-        for (int i = 0; i < sockets.Count; i++)
+	    Debug.Log("Close inventory");
+		for (int i = 0; i < sockets.Count; i++)
         {
             GameObject s = sockets[i];
-            s.transform.DOScale(0, 0.5f);
-            s.transform.DOLocalMove(Vector3.zero, 0.5f).OnComplete(() =>
+            s.transform.DOScale(0, animDuration);
+            s.transform.DOLocalMove(Vector3.zero, animDuration).OnComplete(() =>
             {
                 s.SetActive(false);
-            });
+			});
         }
-    }
+		isInventoryOpen = false;
+	}
 
-    private void OnTriggerEnter(Collider other)
+	private void OnTriggerEnter(Collider other)
     {
 	    if (other.CompareTag("Hand"))
 		    OpenInventory();
