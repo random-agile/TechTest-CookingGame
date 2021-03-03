@@ -5,9 +5,11 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class WristSocket : MonoBehaviour
 {
     [SerializeField] private float offsetY;
+    public Inventory parentInventory;
     private XRGrabInteractable socketedInteractable;
     private Vector3 baseScale;
-    const float scaleMultiplier = 0.5f; // scale to apply on inventory objects
+
+    public bool ContainObject => socketedInteractable != null;
 
 	/// <summary>
 	/// Attach the XRGrabInteratable in the center (+offset) of the socket. Also makes the Rigidbody kinematic
@@ -18,8 +20,8 @@ public class WristSocket : MonoBehaviour
         Debug.Log($"Attach {_objectToAttach}");
 	    socketedInteractable = _objectToAttach;
 	    baseScale = socketedInteractable.transform.localScale;
-	    socketedInteractable.transform.localScale *= scaleMultiplier;
-		// since XRGrabInteractable modifies the rigidbodies after grab event we must modify the rb after it
+	    
+	    // since XRGrabInteractable modifies the rigidbodies after grab event we must modify the rb after it
 		socketedInteractable.onSelectExited.AddListener(_ =>
 		{
 			Debug.Log("Select exit Attach");
@@ -35,10 +37,10 @@ public class WristSocket : MonoBehaviour
 		StartCoroutine(AllowSelect(socketedInteractable.selectingInteractor));
 		
 		socketedInteractable.retainTransformParent = false;
-		socketedInteractable.attachTransform = transform;
 		socketedInteractable.transform.position = transform.position + offsetY * transform.up;
-
 		socketedInteractable.onSelectEntered.AddListener(_ => Release());
+
+		parentInventory.AddObject(socketedInteractable.gameObject);
 	}
 
     IEnumerator AllowSelect(XRBaseInteractor interactor)
@@ -61,18 +63,21 @@ public class WristSocket : MonoBehaviour
 			rb.useGravity = true;
 			rb.isKinematic = false;
 			detachedInteractable.transform.parent = null;
-			detachedInteractable.attachTransform = null;
 			detachedInteractable.onSelectExited.RemoveAllListeners();
 		});
+		parentInventory.RemoveObject(socketedInteractable.gameObject);
 	    socketedInteractable = null;
 	}
 
 	private void OnTriggerEnter(Collider _other)
-    {
+	{
+		if (ContainObject)
+			return;
+
 	    var interactable = _other.GetComponentInParent<XRGrabInteractable>();
 	    if (interactable != null &&
 	        interactable.selectingInteractor != null && // if is grabbed 
-	        interactable.attachTransform == null) // if not already attached
+	        interactable.transform.parent == null)		// if not already attached
 	    {
             Attach(interactable);
 	    }
