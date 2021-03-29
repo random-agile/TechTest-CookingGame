@@ -12,7 +12,7 @@ public class WristSocket : MonoBehaviour
     public bool ContainObject => socketedInteractable != null;
 
 	/// <summary>
-	/// Attach the XRGrabInteratable in the center (+offset) of the socket. Also makes the Rigidbody kinematic
+	/// Attach the XRGrabInteractable in the center (+offset) of the socket. Also makes the Rigidbody kinematic
 	/// </summary>
 	/// <param name="_objectToAttach">The XRGrabInteractable to attach</param>
 	private void Attach(XRGrabInteractable _objectToAttach)
@@ -22,14 +22,14 @@ public class WristSocket : MonoBehaviour
 	    baseScale = socketedInteractable.transform.localScale;
 	    
 	    // since XRGrabInteractable modifies the rigidbodies after grab event we must modify the rb after it
-		socketedInteractable.onSelectExited.AddListener(_ =>
+		socketedInteractable.selectExited.AddListener(_ =>
 		{
 			Debug.Log("Select exit Attach");
 			var rb = socketedInteractable.GetComponent<Rigidbody>();
 			rb.useGravity = false;
 			rb.isKinematic = true;
 			socketedInteractable.transform.parent = transform;
-			socketedInteractable.onSelectExited.RemoveAllListeners();
+			socketedInteractable.selectExited.RemoveAllListeners();
 		});
 
 		// force drop the holdedObject and don't allow regrab it with the same input
@@ -38,7 +38,7 @@ public class WristSocket : MonoBehaviour
 		
 		socketedInteractable.retainTransformParent = false;
 		socketedInteractable.transform.position = transform.position + offsetY * transform.up;
-		socketedInteractable.onSelectEntered.AddListener(_ => Release());
+		socketedInteractable.selectEntered.AddListener(_ => Release());
 
 		parentInventory.AddObject(socketedInteractable.gameObject);
 	}
@@ -52,18 +52,18 @@ public class WristSocket : MonoBehaviour
 	private void Release() 
     {
         Debug.Log($"Release {socketedInteractable}");
-		socketedInteractable.onSelectEntered.RemoveAllListeners();
+		socketedInteractable.selectEntered.RemoveAllListeners();
 		socketedInteractable.transform.localScale = baseScale;
 		var detachedInteractable = socketedInteractable; // used for lambda capture
 		// same as above
-		socketedInteractable.onSelectExited.AddListener(_ =>
+		socketedInteractable.selectExited.AddListener(_ =>
 		{
 			Debug.Log("Select exit Release");
 			var rb = detachedInteractable.GetComponent<Rigidbody>();
 			rb.useGravity = true;
 			rb.isKinematic = false;
 			detachedInteractable.transform.parent = null;
-			detachedInteractable.onSelectExited.RemoveAllListeners();
+			detachedInteractable.selectExited.RemoveAllListeners();
 		});
 		parentInventory.RemoveObject(socketedInteractable.gameObject);
 	    socketedInteractable = null;
