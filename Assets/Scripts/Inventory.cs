@@ -102,15 +102,15 @@ public class Inventory : MonoBehaviour
 	/// <param name="posIndex">positionnal index (used to get socket position from socketsPos array)</param>
 	private void DisplaySocket(WristSocket socket, int posIndex)
 	{
-		GameObject s = socket.gameObject;
-		s.SetActive(true);
-		s.transform.DOScale(1.0f, animDuration).OnComplete(() =>
+		GameObject socketObject = socket.gameObject;
+		socketObject.SetActive(true);
+		socketObject.transform.DOScale(1.0f, animDuration).OnComplete(() =>
 		{
 			isInAnimation = false;
 		});
 		GetWristPosAndUp(posIndex, out var pos, out var up);
-		s.transform.up = up;
-		s.transform.DOLocalMove(pos, animDuration);
+		socketObject.transform.up = up;
+		socketObject.transform.DOLocalMove(pos, animDuration);
 	}
 
 	/// <summary>
@@ -144,10 +144,10 @@ public class Inventory : MonoBehaviour
 		foreach (var socket in sockets)
 		{
 			socket.transform.DOScale(0, animDuration);
-			var sockeGameObject = socket.gameObject; // used for lambda capture
+			var socketObject = socket.gameObject; // used for lambda capture
 			socket.transform.DOLocalMove(Vector3.zero, animDuration).OnComplete(() =>
 			{
-				sockeGameObject.SetActive(false);
+				socketObject.SetActive(false);
 				isInAnimation = false;
 			});
 		}
