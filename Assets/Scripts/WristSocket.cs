@@ -9,6 +9,9 @@ public class WristSocket : MonoBehaviour
     private XRGrabInteractable socketedInteractable;
     private Vector3 baseScale;
 
+	/// <summary>
+	/// Return true if the socket contain an object, false otherwise
+	/// </summary>
     public bool ContainObject => socketedInteractable != null;
 
 	/// <summary>
@@ -43,7 +46,7 @@ public class WristSocket : MonoBehaviour
 		parentInventory.AddObject(socketedInteractable.gameObject);
 	}
 
-    IEnumerator AllowSelect(XRBaseInteractor interactor)
+    private IEnumerator AllowSelect(XRBaseInteractor interactor)
     {
 		yield return new WaitForEndOfFrame();
 		interactor.allowSelect = true;
@@ -76,6 +79,7 @@ public class WristSocket : MonoBehaviour
 
 	    var interactable = _other.GetComponentInParent<XRGrabInteractable>();
 	    if (interactable != null &&
+			parentInventory.CanAddObject &&				// not in animation
 	        interactable.selectingInteractor != null && // if is grabbed 
 	        interactable.transform.parent == null)		// if not already attached
 	    {

@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using DG.Tweening;
 
 [RequireComponent(typeof(SphereCollider))]
 public class Inventory : MonoBehaviour
 {
-    [Header("References")]
+	private enum AskState
+	{
+		None,
+		Open,
+		Close,
+	}
+
+	[Header("References")]
     [SerializeField] private GameObject socketPrefab;
 
     [Header("Settings")]
@@ -14,40 +21,45 @@ public class Inventory : MonoBehaviour
     [SerializeField] private float radius = 0.7f; // radius of the circle on which sockets will be placed
     [SerializeField] private float animDuration = 0.5f; // duration of the open / close animation
 
-    private float maxObjectScale = 1.0f; // Scale max of object stored
-    public float MaxObjectScale => maxObjectScale;
-
 	private List<GameObject> objectList = new List<GameObject>();
     private List<WristSocket> sockets = new List<WristSocket>();
     private List<Vector3> socketsPos = new List<Vector3>();
 
-    private enum AskState
-    {
-		None,
-		Open, 
-		Close,
-    }
-
     private AskState askState;
 	private bool isInAnimation;
 
+	/// <summary>
+	/// Check this to ensure that an object can be safely added to the inventory
+	/// </summary>
+	public bool CanAddObject => !isInAnimation;
+
 	private void Awake()
 	{
-		//maxObjectScale = (2 * Mathf.PI * radius * maxSockets);
 		GenerateSocketObjects();
 	}
 
+	/// <summary>
+	/// Add an object to the inventory
+	/// </summary>
+	/// <param name="_newObject">object to add</param>
 	public void AddObject(GameObject _newObject)
     {
         objectList.Add(_newObject);
     }
 
+	/// <summary>
+	/// Remove the specified gameobject from inventory
+	/// </summary>
+	/// <param name="_removedObject">object to remove</param>
     public void RemoveObject(GameObject _removedObject)
     {
         objectList.Remove(_removedObject);
 	}
 
-    private Vector3 GetWristPos(int index)
+	/// <summary>
+	/// Get the wrist local position relative to this.transform
+	/// </summary>
+	private Vector3 GetWristPos(int index)
     {
 	    float step = 2 * Mathf.PI / maxSockets;
 		float x = Mathf.Cos(index * step);
@@ -56,7 +68,7 @@ public class Inventory : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Generate all wristSockets of inventory in circle around the hanc
+	/// Generate all wristSockets of inventory in circle around the hand
 	/// </summary>
     private void GenerateSocketObjects()
     {
@@ -84,36 +96,46 @@ public class Inventory : MonoBehaviour
 	    askState = AskState.None;
     }
 
-	private void DisplaySocket(int index, int posIndex)
+	/// <summary>
+	/// Set the socket gameobject active and start the display animation (DOScale)
+	/// </summary>
+	/// <param name="socket">socket to display</param>
+	/// <param name="posIndex">positionnal index (used to get socket position from socketsPos array)</param>
+	private void DisplaySocket(WristSocket socket, int posIndex)
 	{
-		GameObject s = sockets[index].gameObject;
+		GameObject s = socket.gameObject;
 		s.SetActive(true);
 		s.transform.DOScale(1.0f, animDuration).OnComplete(() =>
 		{
 			isInAnimation = false;
 		});
-		s.transform.DOLocalMove(GetWristPos(posIndex), animDuration);
+		s.transform.DOLocalMove(socketsPos[posIndex], animDuration);
 	}
 
-    [ContextMenu("Open Inventory")]
+	/// <summary>
+	/// Open the inventory and set isInAnimation to true until the end of the open animation
+	/// </summary>
+	[ContextMenu("Open Inventory")]
     private void OpenInventory()
     {
 	    Debug.Log("Open inventory");
 	    isInAnimation = true;
-	    int displayIndex = 0;
-		for (int i = 0; i < objectList.Count; i++)
-        {
-			// display only sockets that contain an object
-	        if (!sockets[i].ContainObject) 
-		        continue;
-	        DisplaySocket(i, displayIndex++);
-        }
+	    int displayIndex = 0; // index of the wrist to display
+
+	    foreach (var socket in sockets.Where(s => s.ContainObject))
+	    {
+		    DisplaySocket(socket, displayIndex++);
+	    }
+
 		// add empty socket if enough space
 		if (objectList.Count < maxSockets)
-			DisplaySocket(objectList.Count, displayIndex);
+			DisplaySocket(sockets[objectList.Count], displayIndex);
     }
 
-    [ContextMenu("Close Inventory")]
+	/// <summary>
+	/// Close the inventory and set isInAnimation to true until the end of the close animation
+	/// </summary>
+	[ContextMenu("Close Inventory")]
     private void CloseInventory()
     {
 	    isInAnimation = true;
@@ -130,10 +152,10 @@ public class Inventory : MonoBehaviour
 		}
 	}
 
-	// when the user hand trigger the inventory collider, ask for open it
-	// we do not want break current animation by calling directly OpenInventory or CloseInventory
 	private void OnTriggerEnter(Collider other)
 	{
+		// when the user hand trigger the inventory collider, ask for open it
+		// we do not want break current animation by calling directly OpenInventory or CloseInventory
 		if (other.CompareTag("Hand"))
 			askState = AskState.Open;
 	}
