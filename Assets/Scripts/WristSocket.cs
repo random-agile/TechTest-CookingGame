@@ -17,14 +17,14 @@ public class WristSocket : MonoBehaviour
 	/// <summary>
 	/// Attach the XRGrabInteractable in the center (+offset) of the socket. Also makes the Rigidbody kinematic
 	/// </summary>
-	/// <param name="_objectToAttach">The XRGrabInteractable to attach</param>
-	private void Attach(XRGrabInteractable _objectToAttach)
+	/// <param name="objectToAttach">The XRGrabInteractable to attach</param>
+	private void Attach(XRGrabInteractable objectToAttach)
     {
-        Debug.Log($"Attach {_objectToAttach}");
-	    socketedInteractable = _objectToAttach;
+        Debug.Log($"Attach {objectToAttach}");
+	    socketedInteractable = objectToAttach;
 	    baseScale = socketedInteractable.transform.localScale;
 	    
-	    // since XRGrabInteractable modifies the rigidbodies after grab event we must modify the rb after it
+	    // since XRGrabInteractable modifies the rigidbodies after grab event we must modify the rigidbody after it does
 		socketedInteractable.selectExited.AddListener(_ =>
 		{
 			Debug.Log("Select exit Attach");
@@ -32,6 +32,7 @@ public class WristSocket : MonoBehaviour
 			rb.useGravity = false;
 			rb.isKinematic = true;
 			socketedInteractable.transform.parent = transform;
+			socketedInteractable.transform.localRotation = Quaternion.identity; // set the socketInteractable rotation the same as the parent socket
 			socketedInteractable.selectExited.RemoveAllListeners();
 		});
 
@@ -41,7 +42,7 @@ public class WristSocket : MonoBehaviour
 		
 		socketedInteractable.retainTransformParent = false;
 		socketedInteractable.transform.position = transform.position + offsetY * transform.up;
-		socketedInteractable.selectEntered.AddListener(_ => Release());
+		socketedInteractable.selectEntered.AddListener(_ => Release()); // once the object is in the inventory the grab event will release it
 
 		parentInventory.AddObject(socketedInteractable.gameObject);
 	}
@@ -52,6 +53,9 @@ public class WristSocket : MonoBehaviour
 		interactor.allowSelect = true;
     }
 
+	/// <summary>
+	/// Release XRGrabInteractable from the socket and restore its previous state
+	/// </summary>
 	private void Release() 
     {
         Debug.Log($"Release {socketedInteractable}");
@@ -72,12 +76,12 @@ public class WristSocket : MonoBehaviour
 	    socketedInteractable = null;
 	}
 
-	private void OnTriggerEnter(Collider _other)
+	private void OnTriggerStay(Collider other)
 	{
 		if (ContainObject)
 			return;
 
-	    var interactable = _other.GetComponentInParent<XRGrabInteractable>();
+	    var interactable = other.GetComponentInParent<XRGrabInteractable>();
 	    if (interactable != null &&
 			parentInventory.CanAddObject &&				// not in animation
 	        interactable.selectingInteractor != null && // if is grabbed 

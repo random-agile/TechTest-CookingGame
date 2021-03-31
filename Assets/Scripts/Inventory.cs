@@ -23,7 +23,6 @@ public class Inventory : MonoBehaviour
 
 	private List<GameObject> objectList = new List<GameObject>();
     private List<WristSocket> sockets = new List<WristSocket>();
-    private List<Vector3> socketsPos = new List<Vector3>();
 
     private AskState askState;
 	private bool isInAnimation;
@@ -41,36 +40,37 @@ public class Inventory : MonoBehaviour
 	/// <summary>
 	/// Add an object to the inventory
 	/// </summary>
-	/// <param name="_newObject">object to add</param>
-	public void AddObject(GameObject _newObject)
+	/// <param name="newObject">object to add</param>
+	public void AddObject(GameObject newObject)
     {
-        objectList.Add(_newObject);
+        objectList.Add(newObject);
     }
 
 	/// <summary>
 	/// Remove the specified gameobject from inventory
 	/// </summary>
-	/// <param name="_removedObject">object to remove</param>
-    public void RemoveObject(GameObject _removedObject)
+	/// <param name="removedObject">object to remove</param>
+    public void RemoveObject(GameObject removedObject)
     {
-        objectList.Remove(_removedObject);
+        objectList.Remove(removedObject);
 	}
 
 	/// <summary>
 	/// Get the wrist local position relative to this.transform
 	/// </summary>
-	private Vector3 GetWristPos(int index)
-    {
-	    float step = 2 * Mathf.PI / maxSockets;
+	private void GetWristPosAndUp(int index, out Vector3 pos, out Vector3 up)
+	{
+		float step = 2 * Mathf.PI / maxSockets;
 		float x = Mathf.Cos(index * step);
-	    float y = Mathf.Sin(index * step);
-	    return new Vector3(x, y, 0) * radius;
+		float y = Mathf.Sin(index * step);
+		up = new Vector3(x, y, 0);
+		pos = up * radius;
 	}
 
 	/// <summary>
 	/// Generate all wristSockets of inventory in circle around the hand
 	/// </summary>
-    private void GenerateSocketObjects()
+	private void GenerateSocketObjects()
     {
 	    for (int i = 0; i < maxSockets; i++)
 	    {
@@ -79,7 +79,6 @@ public class Inventory : MonoBehaviour
 		    socket.parentInventory = this;
 		    socketObject.SetActive(false);
 		    sockets.Add(socket);
-		    socketsPos.Add(GetWristPos(i));
 	    }
 	}
 
@@ -109,7 +108,9 @@ public class Inventory : MonoBehaviour
 		{
 			isInAnimation = false;
 		});
-		s.transform.DOLocalMove(socketsPos[posIndex], animDuration);
+		GetWristPosAndUp(posIndex, out var pos, out var up);
+		s.transform.up = up;
+		s.transform.DOLocalMove(pos, animDuration);
 	}
 
 	/// <summary>
@@ -140,13 +141,13 @@ public class Inventory : MonoBehaviour
     {
 	    isInAnimation = true;
 		Debug.Log("Close inventory");
-		foreach (var s in sockets)
+		foreach (var socket in sockets)
 		{
-			s.transform.DOScale(0, animDuration);
-			var s1 = s.gameObject;
-			s.transform.DOLocalMove(Vector3.zero, animDuration).OnComplete(() =>
+			socket.transform.DOScale(0, animDuration);
+			var sockeGameObject = socket.gameObject; // used for lambda capture
+			socket.transform.DOLocalMove(Vector3.zero, animDuration).OnComplete(() =>
 			{
-				s1.SetActive(false);
+				sockeGameObject.SetActive(false);
 				isInAnimation = false;
 			});
 		}
