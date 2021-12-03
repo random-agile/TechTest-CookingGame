@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Hand
+  - Knife
+  - Food
   layers:
   - Default
   - TransparentFX
