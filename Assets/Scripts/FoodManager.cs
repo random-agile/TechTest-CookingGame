@@ -95,7 +95,7 @@ public class FoodManager : MonoBehaviour
         if(bar.value >= bar.maxValue -1)
         {
             particles[1].Play();
-            SoundManagerScript.PlaySound("Finish");
+            SoundManager.PlaySound("Finish");
             bar.value = 0;
             food.SetActive(false);
             DetermineResult(foodType);
@@ -107,7 +107,7 @@ public class FoodManager : MonoBehaviour
             slider.SetActive(true);
             bar.value++;
             particles[0].Play();
-            SoundManagerScript.PlaySound("Cut");
+            SoundManager.PlaySound("Cut");
         }
     }
 
@@ -145,7 +145,7 @@ public class FoodManager : MonoBehaviour
 
     public void GrabKnifeSFX()
     {
-        SoundManagerScript.PlaySound("GrabKnife");
+        SoundManager.PlaySound("GrabKnife");
     }
 
     public void GrabFoodSFX()

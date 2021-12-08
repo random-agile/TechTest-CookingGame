@@ -5,21 +5,25 @@ using UnityEngine;
 public class RecipesManager : MonoBehaviour
 {
     FoodManager foodManager;
+    DataManager dataManager;
     private List<string> ingredients;
+    private bool isSliced;
+    [SerializeField] Collider potCol;
 
     void Start()
     {
         foodManager = GameObject.Find("FoodManager").GetComponent<FoodManager>();
+        dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();
     }
 
     //add ingredient to the magic pot and destroy all instantiated prefabs
-    void AddIngredients()
+    public void AddIngredients()
     {
-        if(ingredients.Count >= 6 && foodManager.isDone)
+        if(ingredients.Count >= 6 && foodManager.isDone && isSliced)
         {
 
         }
-        else if(foodManager.isDone)
+        else if(foodManager.isDone && isSliced)
         {
         ingredients.Add(foodManager.foodType);
         foodManager.isDone = false;
@@ -34,6 +38,7 @@ public class RecipesManager : MonoBehaviour
     {
         if(ingredients.Contains("Tomato") && ingredients.Contains("Onion") && ingredients.Contains("Cabbage") && ingredients.Contains("Loaf"))
         {
+            dataManager.score += 1000;
             ingredients.Clear();
         }
     }
