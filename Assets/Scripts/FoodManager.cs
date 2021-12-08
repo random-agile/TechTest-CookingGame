@@ -10,15 +10,11 @@ public class FoodManager : MonoBehaviour
     [SerializeField] private GameObject foodResult;
     [SerializeField] private GameObject slider;
     [SerializeField] private List<ParticleSystem> particles;
-    [SerializeField] private Slider bar;
+    [SerializeField] private Slider cutBar;
+    [SerializeField] private Slider knifeBar;
     public string foodType;
     private bool isPlaced;
     public bool isDone;
-
-    void Start()
-    {
-
-    }
 
     //ensure the food is placed on the socket and reset cut slider if player remove the item before finishing
     public void CheckFood()
@@ -29,7 +25,7 @@ public class FoodManager : MonoBehaviour
         }
         else
         {
-            bar.value = 0;
+            cutBar.value = 0;
             isPlaced = false;
         }
     }
@@ -56,35 +52,35 @@ public class FoodManager : MonoBehaviour
         {
             case "tomato":
                 foodType = "Tomato";
-                bar.maxValue = 12;
+                cutBar.maxValue = 12;
                 break;
             case "onion":
                 foodType = "Onion";
-                bar.maxValue = 30;
+                cutBar.maxValue = 30;
                 break;
             case "cheese":
                 foodType = "Cheese";
-                bar.maxValue = 12;
+                cutBar.maxValue = 12;
                 break;
             case "cabbage":
                 foodType = "Cabbage";
-                bar.maxValue = 16;
+                cutBar.maxValue = 16;
                 break;
             case "loaf":
                 foodType = "Loaf";
-                bar.maxValue = 8;
+                cutBar.maxValue = 8;
                 break;
             case "wholeHam":
                 foodType = "WholeHam";
-                bar.maxValue = 12;
+                cutBar.maxValue = 12;
                 break;
             case "turkey":
                 foodType = "Turkey";
-                bar.maxValue = 20;
+                cutBar.maxValue = 20;
                 break;
             case "avocado":
                 foodType = "Avocado";
-                bar.maxValue = 12;
+                cutBar.maxValue = 12;
                 break;
         }
     }
@@ -92,12 +88,14 @@ public class FoodManager : MonoBehaviour
     // trigger when the cutting happens and play every sounds/fx along it
     void Cut()
     {
-        if(bar.value >= bar.maxValue -1)
+        if(cutBar.value >= cutBar.maxValue -1)
         {
             particles[1].Play();
             SoundManager.PlaySound("Finish");
-            bar.value = 0;
+            cutBar.value = 0;
             food.SetActive(false);
+            food = null;
+            knifeBar.value += 10;
             DetermineResult(foodType);
             slider.SetActive(false);
             isDone = true;
@@ -105,7 +103,7 @@ public class FoodManager : MonoBehaviour
         else
         {
             slider.SetActive(true);
-            bar.value++;
+            cutBar.value++;
             particles[0].Play();
             SoundManager.PlaySound("Cut");
         }

@@ -8,12 +8,24 @@ public class RecipesManager : MonoBehaviour
     DataManager dataManager;
     private List<string> ingredients;
     private bool isSliced;
-    [SerializeField] Collider potCol;
 
     void Start()
     {
         foodManager = GameObject.Find("FoodManager").GetComponent<FoodManager>();
         dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Clone"))
+        {
+            isSliced = true;
+        }
+    }
+
+    void OnCollisionExit(Collision other)
+    {
+        isSliced = false;
     }
 
     //add ingredient to the magic pot and destroy all instantiated prefabs
@@ -27,9 +39,12 @@ public class RecipesManager : MonoBehaviour
         {
         ingredients.Add(foodManager.foodType);
         foodManager.isDone = false;
-        var clones = GameObject.FindGameObjectsWithTag ("Clone");
-        foreach (var clone in clones)
-            {Destroy(clone);}
+        var clones = GameObject.FindGameObjectsWithTag("Clone");
+            foreach (var clone in clones)
+            {   
+                clone.transform.position = new Vector3(-991.39f,-199.535f,498.534f);
+                Destroy(clone);
+            }
         }   
     }
 
