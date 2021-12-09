@@ -12,7 +12,6 @@ public class FoodManager : MonoBehaviour
     [SerializeField] private List<ParticleSystem> particles;
     [SerializeField] private Slider cutBar;
     [SerializeField] private Slider knifeBar;
-    [SerializeField] private Collider col;
 
     public string foodType;
     private bool isPlaced;
@@ -117,28 +116,28 @@ public class FoodManager : MonoBehaviour
         switch (foodType)
         {
             case "Tomato":
-                Instantiate(foodResult.transform.GetChild(0), new Vector3(-91.39f,-19.535f,48.534f), Quaternion.identity);
+                Instantiate(foodResult.transform.GetChild(0), new Vector3(1.665f,1f,0.69f), Quaternion.identity);
                 break;
             case "Onion":
-                Instantiate(foodResult.transform.GetChild(1), new Vector3(1.692f,0.8031f,0.617f), Quaternion.identity);
+                Instantiate(foodResult.transform.GetChild(1), new Vector3(1.665f,1f,0.69f), Quaternion.identity);
                 break;
             case "Cheese":
-                Instantiate(foodResult.transform.GetChild(2), new Vector3(0,0,0), Quaternion.identity);
+                Instantiate(foodResult.transform.GetChild(2), new Vector3(1.665f,1f,0.69f), Quaternion.identity);
                 break;
             case "Cabbage":
-                Instantiate(foodResult.transform.GetChild(3), new Vector3(1.692f,0.8031f,0.617f), Quaternion.identity);
+                Instantiate(foodResult.transform.GetChild(3), new Vector3(1.665f,1f,0.69f), Quaternion.identity);
                 break;
             case "Loaf":
-                Instantiate(foodResult.transform.GetChild(4), new Vector3(1.692f,0.8031f,0.617f), Quaternion.identity);
+                Instantiate(foodResult.transform.GetChild(4), new Vector3(1.665f,1f,0.69f), Quaternion.identity);
                 break;
             case "Ham":
-                Instantiate(foodResult.transform.GetChild(5), new Vector3(-91.39f,-19.568f,48.534f), Quaternion.identity);
+                Instantiate(foodResult.transform.GetChild(5), new Vector3(1.665f,1f,0.69f), Quaternion.identity);
                 break;
             case "Turkey":
-                Instantiate(foodResult.transform.GetChild(6), new Vector3(1.692f,0.8031f,0.617f), Quaternion.identity);
+                Instantiate(foodResult.transform.GetChild(6), new Vector3(1.665f,1f,0.69f), Quaternion.identity);
                 break;
             case "Avocado":
-                Instantiate(foodResult.transform.GetChild(7), new Vector3(1.692f,0.8031f,0.617f), Quaternion.identity);
+                Instantiate(foodResult.transform.GetChild(7), new Vector3(1.665f,1f,0.69f), Quaternion.identity);
                 break;
         }
     }

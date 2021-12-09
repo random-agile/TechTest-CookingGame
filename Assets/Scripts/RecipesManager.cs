@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class RecipesManager : MonoBehaviour
 {
     FoodManager foodManager;
     DataManager dataManager;
     [SerializeField] private List<GameObject> meals;
-    private List<string> ingredients;
+    [SerializeField] private List<string> ingredients;
     private bool isSliced;
+    [SerializeField] XRSocketInteractor potSocket;
 
     void Start()
     {
@@ -20,7 +22,12 @@ public class RecipesManager : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Clone"))
         {
+            potSocket.enabled = true;
             isSliced = true;
+        }
+        else if(!other.gameObject.CompareTag("Clone"))
+        {
+            potSocket.enabled = false;
         }
     }
 
@@ -32,11 +39,11 @@ public class RecipesManager : MonoBehaviour
     //add ingredient to the magic pot and destroy all instantiated prefabs
     public void AddIngredients()
     {
-        if(ingredients.Count >= 6 && foodManager.isDone && isSliced)
-        {
+        //if(ingredients.Count >= 6 && foodManager.isDone && isSliced)
+        //{
 
-        }
-        else if(foodManager.isDone && isSliced)
+        //}
+        if(foodManager.isDone && isSliced)
         {
         ingredients.Add(foodManager.foodType);
         foodManager.isDone = false;
