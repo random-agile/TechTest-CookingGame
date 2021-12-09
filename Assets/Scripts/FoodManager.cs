@@ -12,6 +12,8 @@ public class FoodManager : MonoBehaviour
     [SerializeField] private List<ParticleSystem> particles;
     [SerializeField] private Slider cutBar;
     [SerializeField] private Slider knifeBar;
+    [SerializeField] private Collider col;
+
     public string foodType;
     private bool isPlaced;
     public bool isDone;
@@ -71,7 +73,7 @@ public class FoodManager : MonoBehaviour
                 cutBar.maxValue = 8;
                 break;
             case "wholeHam":
-                foodType = "WholeHam";
+                foodType = "Ham";
                 cutBar.maxValue = 12;
                 break;
             case "turkey":
@@ -129,7 +131,7 @@ public class FoodManager : MonoBehaviour
             case "Loaf":
                 Instantiate(foodResult.transform.GetChild(4), new Vector3(1.692f,0.8031f,0.617f), Quaternion.identity);
                 break;
-            case "WholeHam":
+            case "Ham":
                 Instantiate(foodResult.transform.GetChild(5), new Vector3(-91.39f,-19.568f,48.534f), Quaternion.identity);
                 break;
             case "Turkey":
