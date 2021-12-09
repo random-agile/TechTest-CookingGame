@@ -11,6 +11,8 @@ public class RecipesManager : MonoBehaviour
     [SerializeField] private List<string> ingredients;
     private bool isSliced;
     [SerializeField] XRSocketInteractor potSocket;
+    [SerializeField] private GameObject cookButton;
+    private int x;
 
     void Start()
     {
@@ -18,6 +20,7 @@ public class RecipesManager : MonoBehaviour
         dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();
     }
 
+    //ensure that only sliced ingredients can be put in the magic pot
     void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Clone"))
@@ -39,78 +42,92 @@ public class RecipesManager : MonoBehaviour
     //add ingredient to the magic pot and destroy all instantiated prefabs
     public void AddIngredients()
     {
-        //if(ingredients.Count >= 6 && foodManager.isDone && isSliced)
-        //{
+        if(ingredients.Count >= 4 && foodManager.isDone && isSliced)
+        {
+        DestroyUsedIngredients();
+        }
 
-        //}
-        if(foodManager.isDone && isSliced)
+        else if(foodManager.isDone && isSliced)
         {
         ingredients.Add(foodManager.foodType);
         foodManager.isDone = false;
+        DestroyUsedIngredients();
+        if(ingredients.Count >= 3){cookButton.SetActive(true);}
+        }
+
+
+    }   
+
+    //destroy all instanciated prefabs
+    void DestroyUsedIngredients()
+    {
         var clones = GameObject.FindGameObjectsWithTag("Clone");
             foreach (var clone in clones)
             {   
                 clone.transform.position = new Vector3(-991.39f,-199.535f,498.534f);
                 Destroy(clone);
             }
-        }   
     }
 
-    //check what was put inside the magic pot, to determine the recipe and amount of points obtained then clear the list
-    void CheckRecipes()
+    //check what was put inside the magic pot, to determine the recipe and amount of points obtained
+    public void CheckRecipes()
     {
-        if(ingredients.Contains("Tomato") && ingredients.Contains("Onion") && ingredients.Contains("Cabbage") && ingredients.Contains("Loaf") && ingredients.Contains("Ham"))
-        {
-            meals[0].SetActive(true);
+        if(ingredients.Contains("Tomato") && ingredients.Contains("Onion") && ingredients.Contains("Loaf") && ingredients.Contains("Ham"))
+        {    
+            x = 0;
+            AbstractRecipes();        
             StartCoroutine(WaitForDish());
-            meals[0].SetActive(false);
             dataManager.score += 2000;           
-            ingredients.Clear();
         }
         else if(ingredients.Contains("Loaf") && ingredients.Contains("Cheese") && ingredients.Contains("Ham"))
         {
-            meals[1].SetActive(true);
+            x = 1;
+            AbstractRecipes(); 
             StartCoroutine(WaitForDish());
-            meals[1].SetActive(false);
             dataManager.score += 1000;
-            ingredients.Clear();
         }
         else if(ingredients.Contains("Tomato") && ingredients.Contains("Onion") && ingredients.Contains("Cabbage") && ingredients.Contains("Avocado"))
         {
-            meals[2].SetActive(true);
+            x = 2;
+            AbstractRecipes(); 
             StartCoroutine(WaitForDish());
-            meals[2].SetActive(false);
             dataManager.score += 2000;
-            ingredients.Clear();
         }
         else if(ingredients.Contains("Onion") && ingredients.Contains("Cabbage") && ingredients.Contains("Avocado"))
         {
-            meals[3].SetActive(true);
+            x = 3;
+            AbstractRecipes(); 
             StartCoroutine(WaitForDish());
-            meals[3].SetActive(false);
             dataManager.score += 1000;
-            ingredients.Clear();
         }
         else if(ingredients.Contains("Turkey") && ingredients.Contains("Tomato") && ingredients.Contains("Avocado") && ingredients.Contains("Cheese"))
         {
-            meals[4].SetActive(true);
+            x = 4;
+            AbstractRecipes(); 
             StartCoroutine(WaitForDish());
-            meals[4].SetActive(false);
             dataManager.score += 3000;
-            ingredients.Clear();
         }
         else
         {
-            meals[5].SetActive(true);
+            x = 5;
+            AbstractRecipes(); 
             StartCoroutine(WaitForDish());
-            meals[5].SetActive(false);
             dataManager.score += 500;
-            ingredients.Clear();
         }
+    }
+
+    //abstracting lines of code from CheckRecipes(), play VFX, SFX, anims & clear list
+    void AbstractRecipes()
+    {
+        meals[x].SetActive(true);
+        cookButton.SetActive(false);
+        foodManager.particles[2].Play();
+        ingredients.Clear();
     }
 
     IEnumerator WaitForDish()
     {
         yield return new WaitForSeconds(3f);
+        meals[x].SetActive(false);
     }
 }

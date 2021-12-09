@@ -9,9 +9,9 @@ public class FoodManager : MonoBehaviour
     private GameObject food;
     [SerializeField] private GameObject foodResult;
     [SerializeField] private GameObject slider;
-    [SerializeField] private List<ParticleSystem> particles;
     [SerializeField] private Slider cutBar;
     [SerializeField] private Slider knifeBar;
+    public List<ParticleSystem> particles;
 
     public string foodType;
     private bool isPlaced;
