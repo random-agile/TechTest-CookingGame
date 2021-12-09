@@ -11,6 +11,7 @@ public class RecipesManager : MonoBehaviour
     [SerializeField] private List<string> ingredients;
     private bool isSliced;
     [SerializeField] XRSocketInteractor potSocket;
+    [SerializeField] private GameObject foodLevel;
     [SerializeField] private GameObject cookButton;
     private int x;
 
@@ -49,13 +50,14 @@ public class RecipesManager : MonoBehaviour
 
         else if(foodManager.isDone && isSliced)
         {
+        SoundManager.PlaySound("PutIngredient");
         ingredients.Add(foodManager.foodType);
+        foodLevel.SetActive(true);
+        foodManager.particles[3].Play();
         foodManager.isDone = false;
         DestroyUsedIngredients();
         if(ingredients.Count >= 3){cookButton.SetActive(true);}
         }
-
-
     }   
 
     //destroy all instanciated prefabs
@@ -119,6 +121,7 @@ public class RecipesManager : MonoBehaviour
     //abstracting lines of code from CheckRecipes(), play VFX, SFX, anims & clear list
     void AbstractRecipes()
     {
+        SoundManager.PlaySound("CookingDone");
         meals[x].SetActive(true);
         cookButton.SetActive(false);
         foodManager.particles[2].Play();
@@ -129,5 +132,7 @@ public class RecipesManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         meals[x].SetActive(false);
+        foodManager.particles[3].Stop();
+        foodLevel.SetActive(false);
     }
 }

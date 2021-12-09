@@ -141,15 +141,4 @@ public class FoodManager : MonoBehaviour
                 break;
         }
     }
-
-    public void GrabKnifeSFX()
-    {
-        SoundManager.PlaySound("GrabKnife");
-    }
-
-    public void GrabFoodSFX()
-    {
-
-    }
-
 }

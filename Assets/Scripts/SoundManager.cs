@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    public static AudioClip cut, finish, grabknife;
+    public static AudioClip cut, finish, grabKnife, cookingDone, grabFood, putIngredient;
     static AudioSource audioSrc;
 
     // Start is called before the first frame update
@@ -12,7 +12,10 @@ public class SoundManager : MonoBehaviour
     {
         cut = Resources.Load<AudioClip>("Cut");
         finish = Resources.Load<AudioClip>("Finish");
-        grabknife = Resources.Load<AudioClip>("GrabKnife");
+        grabKnife = Resources.Load<AudioClip>("GrabKnife");
+        cookingDone = Resources.Load<AudioClip>("CookingDone");
+        grabFood = Resources.Load<AudioClip>("GrabFood");
+        putIngredient = Resources.Load<AudioClip>("PutIngredient");
         audioSrc = GetComponent<AudioSource>();
     }       
 
@@ -27,9 +30,28 @@ public class SoundManager : MonoBehaviour
                 audioSrc.PlayOneShot(finish, 0.5f);
                 break;
             case "GrabKnife":
-                audioSrc.PlayOneShot(grabknife, 1f);
+                audioSrc.PlayOneShot(grabKnife, 1f);
+                break;
+            case "CookingDone":
+                audioSrc.PlayOneShot(cookingDone, 0.75f);
+                break;
+            case "GrabFood":
+                audioSrc.PlayOneShot(grabFood, 0.75f);
+                break;
+            case "PutIngredient":
+                audioSrc.PlayOneShot(putIngredient, 0.75f);
                 break;
         }
+    }
+
+    public void GrabKnifeSFX()
+    {
+        PlaySound("GrabKnife");
+    }
+
+    public void GrabFoodSFX()
+    {
+        PlaySound("GrabFood");
     }
 
     public static void StopSound()

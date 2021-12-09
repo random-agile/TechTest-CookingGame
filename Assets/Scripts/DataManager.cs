@@ -11,7 +11,8 @@ public class DataManager : MonoBehaviour
     private string rank;
     [SerializeField] private TMP_Text rankText;
     [SerializeField] GameObject timerObject;
-    private float timer = 180;
+    [SerializeField] GameObject allObjects;
+    private float timer = 120;
     [SerializeField] private TMP_Text timerText;
     private int KnifeLvl = 1;
     private int KnifeExp;
@@ -46,7 +47,7 @@ public class DataManager : MonoBehaviour
     //display results when time is up
     void TimerEnd()
     {
-
+        allObjects.SetActive(false);
     }
 
     //get rank based on player score
