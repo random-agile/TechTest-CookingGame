@@ -45,7 +45,11 @@ public class RecipesManager : MonoBehaviour
     {
         if(ingredients.Count >= 4 && foodManager.isDone && isSliced)
         {
+        SoundManager.PlaySound("PutIngredient");
         DestroyUsedIngredients();
+        foodManager.particles[3].Play();
+        foodManager.isDone = false;
+        CheckRecipes();
         }
 
         else if(foodManager.isDone && isSliced)

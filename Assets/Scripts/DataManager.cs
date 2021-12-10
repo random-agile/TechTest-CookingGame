@@ -12,7 +12,7 @@ public class DataManager : MonoBehaviour
     [SerializeField] private TMP_Text rankText;
     [SerializeField] GameObject timerObject;
     [SerializeField] GameObject allObjects;
-    private float timer = 120;
+    private float timer = 240;
     [SerializeField] private TMP_Text timerText;
     private int KnifeLvl = 1;
     private int KnifeExp;
