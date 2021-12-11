@@ -58,9 +58,5 @@ public class SoundManager : MonoBehaviour
     {
         PlaySound("GrabFood");
     }
-
-    public static void StopSound()
-    {
-        audioSrc.Stop();
-    }
+    
 }

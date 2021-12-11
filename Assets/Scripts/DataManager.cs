@@ -30,6 +30,8 @@ public class DataManager : MonoBehaviour
     public int KnifeLvl = 1;
     private bool isStarted;
 
+    [SerializeField] AudioSource audioSrcBgm;
+
     void Start()
     {
         highScore = PlayerPrefs.GetInt("HighScore");
@@ -67,14 +69,13 @@ public class DataManager : MonoBehaviour
     //display results when time is up
     void TimerEnd()
     {
+        SoundManager.PlaySound("CookingDone");
         foreach (var all in allObjects)
         {all.SetActive(false);}
-
-        DetermineRank();
-        DetermineHighScore();
-
         foreach (var score in scoreObjects)
         {score.SetActive(true);}
+        DetermineRank();
+        DetermineHighScore();
     }
 
     //get rank based on player score
@@ -107,6 +108,9 @@ public class DataManager : MonoBehaviour
 
     public void StartGame()
     {
+        SoundManager.PlaySound("CookingDone");
+        audioSrcBgm.Play();
+        timer = 240;
         isStarted = true;
         startButton.SetActive(false);
         foreach (var all in allObjects)
