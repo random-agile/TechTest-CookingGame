@@ -700,7 +700,7 @@ MonoBehaviour:
   m_ThrowAngularVelocityScale: 1
   m_ForceGravityOnDetach: 0
   m_RetainTransformParent: 1
---- !u!1 &4118085290647412382
+--- !u!1 &2812618540309910592
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -708,12 +708,12 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7738356577761345978}
-  - component: {fileID: 6372482709446887167}
-  - component: {fileID: 2565635442136201743}
-  - component: {fileID: 8880833704704061397}
-  - component: {fileID: 5936818033454741130}
-  - component: {fileID: 9220619582442601860}
+  - component: {fileID: 3189600792653451002}
+  - component: {fileID: 2012095905601601887}
+  - component: {fileID: 4325867803844687253}
+  - component: {fileID: 1941041478858596665}
+  - component: {fileID: 7022816749661239396}
+  - component: {fileID: 7301993739274340903}
   m_Layer: 0
   m_Name: AvovadoSlice
   m_TagString: Clone
@@ -721,35 +721,35 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7738356577761345978
+--- !u!4 &3189600792653451002
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4118085290647412382}
+  m_GameObject: {fileID: 2812618540309910592}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0239, y: 0.052839, z: -0.0226}
-  m_LocalScale: {x: 0.38586, y: 0.38586, z: 0.38586}
+  m_LocalPosition: {x: 0.015, y: 0.045, z: -0.0083}
+  m_LocalScale: {x: 0.4104, y: 0.4104, z: 0.4104}
   m_Children: []
   m_Father: {fileID: 6457890245367224537}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6372482709446887167
+--- !u!33 &2012095905601601887
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4118085290647412382}
-  m_Mesh: {fileID: 2361007020448447751, guid: b5aaa971d4e05b84ebceab7df0f45b9e, type: 3}
---- !u!23 &2565635442136201743
+  m_GameObject: {fileID: 2812618540309910592}
+  m_Mesh: {fileID: 5509027902309466477, guid: b5aaa971d4e05b84ebceab7df0f45b9e, type: 3}
+--- !u!23 &4325867803844687253
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4118085290647412382}
+  m_GameObject: {fileID: 2812618540309910592}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -762,9 +762,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5810983445156949740, guid: b5aaa971d4e05b84ebceab7df0f45b9e, type: 3}
-  - {fileID: -4245292732340243318, guid: b5aaa971d4e05b84ebceab7df0f45b9e, type: 3}
-  - {fileID: 1536597122783544161, guid: b5aaa971d4e05b84ebceab7df0f45b9e, type: 3}
+  - {fileID: 1151844921754575795, guid: b5aaa971d4e05b84ebceab7df0f45b9e, type: 3}
+  - {fileID: -532782045497273310, guid: b5aaa971d4e05b84ebceab7df0f45b9e, type: 3}
+  - {fileID: -3092847324252717431, guid: b5aaa971d4e05b84ebceab7df0f45b9e, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -786,13 +786,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!54 &8880833704704061397
+--- !u!54 &1941041478858596665
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4118085290647412382}
+  m_GameObject: {fileID: 2812618540309910592}
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
@@ -802,27 +802,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &5936818033454741130
+--- !u!64 &7022816749661239396
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4118085290647412382}
+  m_GameObject: {fileID: 2812618540309910592}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 2361007020448447751, guid: b5aaa971d4e05b84ebceab7df0f45b9e, type: 3}
---- !u!114 &9220619582442601860
+  m_Mesh: {fileID: 5509027902309466477, guid: b5aaa971d4e05b84ebceab7df0f45b9e, type: 3}
+--- !u!114 &7301993739274340903
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4118085290647412382}
+  m_GameObject: {fileID: 2812618540309910592}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
@@ -848,19 +848,7 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
-        m_MethodName: GrabFoodSFX
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_SelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -967,7 +955,7 @@ Transform:
   - {fileID: 1888414158934068161}
   - {fileID: 3886847336990543581}
   - {fileID: 8853838442671523614}
-  - {fileID: 7738356577761345978}
+  - {fileID: 3189600792653451002}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
