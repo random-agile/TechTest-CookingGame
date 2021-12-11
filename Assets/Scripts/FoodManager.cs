@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class FoodManager : MonoBehaviour
 {
+    DataManager dataManager;
     [SerializeField] private GameObject knife;
     private GameObject food;
     [SerializeField] private GameObject foodResult;
@@ -16,6 +17,11 @@ public class FoodManager : MonoBehaviour
     public string foodType;
     private bool isPlaced;
     public bool isDone;
+
+    void Start()
+    {
+        dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();
+    }
 
     //ensure the food is placed on the socket and reset cut slider if player remove the item before finishing
     public void CheckFood()
@@ -53,35 +59,35 @@ public class FoodManager : MonoBehaviour
         {
             case "tomato":
                 foodType = "Tomato";
-                cutBar.maxValue = 12;
+                cutBar.maxValue = 12 - dataManager.KnifeLvl * 2;
                 break;
             case "onion":
                 foodType = "Onion";
-                cutBar.maxValue = 30;
+                cutBar.maxValue = 30 - dataManager.KnifeLvl * 2;
                 break;
             case "cheese":
                 foodType = "Cheese";
-                cutBar.maxValue = 12;
+                cutBar.maxValue = 12 - dataManager.KnifeLvl * 2;
                 break;
             case "cabbage":
                 foodType = "Cabbage";
-                cutBar.maxValue = 16;
+                cutBar.maxValue = 16 - dataManager.KnifeLvl * 2;
                 break;
             case "loaf":
                 foodType = "Loaf";
-                cutBar.maxValue = 8;
+                cutBar.maxValue = 8 - dataManager.KnifeLvl * 2;
                 break;
             case "wholeHam":
                 foodType = "Ham";
-                cutBar.maxValue = 12;
+                cutBar.maxValue = 12 - dataManager.KnifeLvl * 2;
                 break;
             case "turkey":
                 foodType = "Turkey";
-                cutBar.maxValue = 20;
+                cutBar.maxValue = 20 - dataManager.KnifeLvl * 2;
                 break;
             case "avocado":
                 foodType = "Avocado";
-                cutBar.maxValue = 12;
+                cutBar.maxValue = 12 - dataManager.KnifeLvl * 2;
                 break;
         }
     }
@@ -97,6 +103,11 @@ public class FoodManager : MonoBehaviour
             food.SetActive(false);
             food = null;
             knifeBar.value += 10;
+            if(knifeBar.value >= knifeBar.maxValue)
+            {
+                knifeBar.value = 0;
+                dataManager.KnifeLvl++;
+            }
             DetermineResult(foodType);
             slider.SetActive(false);
             isDone = true;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    public static AudioClip cut, finish, grabKnife, cookingDone, grabFood, putIngredient;
+    public static AudioClip cut, finish, grabKnife, cookingDone, grabFood, putIngredient, cookingIn;
     static AudioSource audioSrc;
 
     // Start is called before the first frame update
@@ -16,6 +16,8 @@ public class SoundManager : MonoBehaviour
         cookingDone = Resources.Load<AudioClip>("CookingDone");
         grabFood = Resources.Load<AudioClip>("GrabFood");
         putIngredient = Resources.Load<AudioClip>("PutIngredient");
+        cookingIn = Resources.Load<AudioClip>("CookingIn");
+
         audioSrc = GetComponent<AudioSource>();
     }       
 
@@ -40,6 +42,9 @@ public class SoundManager : MonoBehaviour
                 break;
             case "PutIngredient":
                 audioSrc.PlayOneShot(putIngredient, 0.75f);
+                break;
+            case "CookingIn":
+                audioSrc.PlayOneShot(cookingIn, 0.75f);
                 break;
         }
     }

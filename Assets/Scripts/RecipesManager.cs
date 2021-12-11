@@ -13,12 +13,13 @@ public class RecipesManager : MonoBehaviour
     [SerializeField] XRSocketInteractor potSocket;
     [SerializeField] private GameObject foodLevel;
     [SerializeField] private GameObject cookButton;
+    [SerializeField] private Animation anim;
     private int x;
 
     void Start()
     {
-        foodManager = GameObject.Find("FoodManager").GetComponent<FoodManager>();
-        dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();
+       foodManager = GameObject.Find("FoodManager").GetComponent<FoodManager>();
+       dataManager = GameObject.Find("DataManager").GetComponent<DataManager>();
     }
 
     //ensure that only sliced ingredients can be put in the magic pot
@@ -81,43 +82,37 @@ public class RecipesManager : MonoBehaviour
         if(ingredients.Contains("Tomato") && ingredients.Contains("Onion") && ingredients.Contains("Loaf") && ingredients.Contains("Ham"))
         {    
             x = 0;
-            AbstractRecipes();        
-            StartCoroutine(WaitForDish());
+            StartCoroutine(WaitAnim());
             dataManager.score += 2000;           
         }
         else if(ingredients.Contains("Loaf") && ingredients.Contains("Cheese") && ingredients.Contains("Ham"))
         {
             x = 1;
-            AbstractRecipes(); 
-            StartCoroutine(WaitForDish());
+            StartCoroutine(WaitAnim());
             dataManager.score += 1000;
         }
         else if(ingredients.Contains("Tomato") && ingredients.Contains("Onion") && ingredients.Contains("Cabbage") && ingredients.Contains("Avocado"))
         {
             x = 2;
-            AbstractRecipes(); 
-            StartCoroutine(WaitForDish());
+            StartCoroutine(WaitAnim());
             dataManager.score += 2000;
         }
         else if(ingredients.Contains("Onion") && ingredients.Contains("Cabbage") && ingredients.Contains("Avocado"))
         {
             x = 3;
-            AbstractRecipes(); 
-            StartCoroutine(WaitForDish());
+            StartCoroutine(WaitAnim());
             dataManager.score += 1000;
         }
         else if(ingredients.Contains("Turkey") && ingredients.Contains("Tomato") && ingredients.Contains("Avocado") && ingredients.Contains("Cheese"))
         {
             x = 4;
-            AbstractRecipes(); 
-            StartCoroutine(WaitForDish());
+            StartCoroutine(WaitAnim());
             dataManager.score += 3000;
         }
         else
         {
             x = 5;
-            AbstractRecipes(); 
-            StartCoroutine(WaitForDish());
+            StartCoroutine(WaitAnim());
             dataManager.score += 500;
         }
     }
@@ -127,7 +122,6 @@ public class RecipesManager : MonoBehaviour
     {
         SoundManager.PlaySound("CookingDone");
         meals[x].SetActive(true);
-        cookButton.SetActive(false);
         foodManager.particles[2].Play();
         ingredients.Clear();
     }
@@ -138,5 +132,15 @@ public class RecipesManager : MonoBehaviour
         meals[x].SetActive(false);
         foodManager.particles[3].Stop();
         foodLevel.SetActive(false);
+    }
+
+    IEnumerator WaitAnim()
+    {
+        SoundManager.PlaySound("CookingIn");
+        cookButton.SetActive(false);
+        anim.Play();
+        yield return new WaitForSeconds(3.5f);
+        AbstractRecipes();
+        StartCoroutine(WaitForDish());
     }
 }
