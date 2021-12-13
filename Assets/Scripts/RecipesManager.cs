@@ -5,15 +5,20 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class RecipesManager : MonoBehaviour
 {
+    [Header("Scripts")]
+    [SerializeField] XRSocketInteractor potSocket;
     FoodManager foodManager;
     DataManager dataManager;
+
+    [Header("Meals, Ingredients Objects")]
     [SerializeField] private List<GameObject> meals;
     [SerializeField] private List<string> ingredients;
-    private bool isSliced;
-    [SerializeField] XRSocketInteractor potSocket;
     [SerializeField] private GameObject foodLevel;
     [SerializeField] private GameObject cookButton;
     [SerializeField] private Animation anim;
+
+    private bool isSliced;
+    private int points;
     private int x;
 
     void Start()
@@ -82,44 +87,45 @@ public class RecipesManager : MonoBehaviour
         if(ingredients.Contains("Tomato") && ingredients.Contains("Onion") && ingredients.Contains("Loaf") && ingredients.Contains("Ham"))
         {    
             x = 0;
-            StartCoroutine(WaitAnim());
-            dataManager.score += 2000;           
+            points = 2000;   
+            StartCoroutine(WaitAnim());      
         }
         else if(ingredients.Contains("Loaf") && ingredients.Contains("Cheese") && ingredients.Contains("Ham"))
         {
             x = 1;
+            points = 1000;
             StartCoroutine(WaitAnim());
-            dataManager.score += 1000;
         }
         else if(ingredients.Contains("Tomato") && ingredients.Contains("Onion") && ingredients.Contains("Cabbage") && ingredients.Contains("Avocado"))
         {
             x = 2;
+            points = 2000;
             StartCoroutine(WaitAnim());
-            dataManager.score += 2000;
         }
         else if(ingredients.Contains("Onion") && ingredients.Contains("Cabbage") && ingredients.Contains("Avocado"))
         {
             x = 3;
+            points = 1000;
             StartCoroutine(WaitAnim());
-            dataManager.score += 1000;
         }
         else if(ingredients.Contains("Turkey") && ingredients.Contains("Tomato") && ingredients.Contains("Avocado") && ingredients.Contains("Cheese"))
         {
             x = 4;
+            points = 3000;
             StartCoroutine(WaitAnim());
-            dataManager.score += 3000;
         }
         else
         {
             x = 5;
+            points = 500;
             StartCoroutine(WaitAnim());
-            dataManager.score += 500;
         }
     }
 
     //abstracting lines of code from CheckRecipes(), play VFX, SFX, anims & clear list
     void AbstractRecipes()
     {
+        dataManager.score += points;
         SoundManager.PlaySound("CookingDone");
         meals[x].SetActive(true);
         foodManager.particles[2].Play();

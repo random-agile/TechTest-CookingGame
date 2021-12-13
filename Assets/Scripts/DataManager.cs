@@ -14,12 +14,11 @@ public class DataManager : MonoBehaviour
     [SerializeField] private TMP_Text knifeText;
     [SerializeField] private TMP_Text highScoreText;
 
-
     [Header("Objects")]
-    [SerializeField] GameObject timerObject;
-    [SerializeField] GameObject ingredientsObjects;
     [SerializeField] List<GameObject> allObjects;
     [SerializeField] List<GameObject> scoreObjects;
+    [SerializeField] GameObject timerObject;
+    [SerializeField] GameObject ingredientsObjects;
     [SerializeField] GameObject startButton;
 
     [Header("Data")]
@@ -37,6 +36,7 @@ public class DataManager : MonoBehaviour
         highScore = PlayerPrefs.GetInt("HighScore");
     }
 
+    //update UI text information on each frames
     void Update()
     {
         scoreText.text = score.ToString();
@@ -53,6 +53,7 @@ public class DataManager : MonoBehaviour
         if(timer <= -1 & isStarted)
         {
             timerObject.SetActive(false);
+            enabled = false;
             TimerEnd();
         }
     }
@@ -81,22 +82,24 @@ public class DataManager : MonoBehaviour
     //get rank based on player score
     void DetermineRank()
     {
-        if(score >= 10000)
+        if(score >= 8000)
         {rank = "S"; rankText.text = rank;}
-        else if(score >= 8000)
-        {rank = "A"; rankText.text = rank;}
         else if(score >= 6000)
-        {rank = "B"; rankText.text = rank;}
+        {rank = "A"; rankText.text = rank;}
         else if(score >= 4000)
+        {rank = "B"; rankText.text = rank;}
+        else if(score >= 2000)
         {rank = "C"; rankText.text = rank;}
-        else if(score < 4000)
+        else if(score < 2000)
         {rank = "D"; rankText.text = rank;}
     }
 
+    //save or load a new highscore at the end of the game
     void DetermineHighScore()
     {
         if(score > highScore)
         {
+        highScoreText.text = score.ToString();
         PlayerPrefs.SetInt("HighScore", score);
         PlayerPrefs.Save();
         }
@@ -106,6 +109,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    //activate all interactables object after pressing start
     public void StartGame()
     {
         SoundManager.PlaySound("CookingDone");
@@ -117,6 +121,7 @@ public class DataManager : MonoBehaviour
         {all.SetActive(true);}
     }
 
+    //replay the game
     public void ReplayGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);

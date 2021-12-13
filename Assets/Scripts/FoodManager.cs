@@ -6,14 +6,19 @@ using UnityEngine.UI;
 public class FoodManager : MonoBehaviour
 {
     DataManager dataManager;
+
+    [Header("Objects")]
     [SerializeField] private GameObject knife;
-    private GameObject food;
     [SerializeField] private GameObject foodResult;
     [SerializeField] private GameObject slider;
+    private GameObject food;
+
+    [Header("UI Gauge & Particles")]
     [SerializeField] private Slider cutBar;
     [SerializeField] private Slider knifeBar;
     public List<ParticleSystem> particles;
 
+    [Header("FoodType & BoolCheck")]
     public string foodType;
     private bool isPlaced;
     public bool isDone;

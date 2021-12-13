@@ -19,32 +19,33 @@ public class SoundManager : MonoBehaviour
         cookingIn = Resources.Load<AudioClip>("CookingIn");
 
         audioSrc = GetComponent<AudioSource>();
-    }       
+    }    
 
+    //the main switch/case that will be used to trigger sound effects
     public static void PlaySound(string clip)
     {
         switch (clip)
         {
             case "Cut":
-                audioSrc.PlayOneShot(cut, 0.75f);
+                audioSrc.PlayOneShot(cut, 2f);
                 break;
             case "Finish":
-                audioSrc.PlayOneShot(finish, 0.5f);
+                audioSrc.PlayOneShot(finish, 1.5f);
                 break;
             case "GrabKnife":
-                audioSrc.PlayOneShot(grabKnife, 1f);
+                audioSrc.PlayOneShot(grabKnife, 2f);
                 break;
             case "CookingDone":
-                audioSrc.PlayOneShot(cookingDone, 0.75f);
+                audioSrc.PlayOneShot(cookingDone, 2f);
                 break;
             case "GrabFood":
-                audioSrc.PlayOneShot(grabFood, 0.75f);
+                audioSrc.PlayOneShot(grabFood, 2f);
                 break;
             case "PutIngredient":
-                audioSrc.PlayOneShot(putIngredient, 0.75f);
+                audioSrc.PlayOneShot(putIngredient, 2f);
                 break;
             case "CookingIn":
-                audioSrc.PlayOneShot(cookingIn, 0.75f);
+                audioSrc.PlayOneShot(cookingIn, 2f);
                 break;
         }
     }

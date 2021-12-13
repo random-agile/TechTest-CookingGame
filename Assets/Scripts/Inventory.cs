@@ -17,7 +17,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private GameObject socketPrefab;
 
     [Header("Settings")]
-    [SerializeField] private int maxSockets = 12; 
+    [SerializeField] private int maxSockets = 4;
     [SerializeField] private float radius = 0.7f; // radius of the circle on which sockets will be placed
     [SerializeField] private float animDuration = 0.5f; // duration of the open / close animation
 
@@ -60,7 +60,7 @@ public class Inventory : MonoBehaviour
 	/// </summary>
 	private void GetWristPosAndUp(int index, out Vector3 pos, out Vector3 up)
 	{
-		float step = 2 * Mathf.PI / maxSockets;
+		float step = 6 * Mathf.PI / maxSockets;
 		float x = Mathf.Cos(index * step);
 		float y = Mathf.Sin(index * step);
 		up = new Vector3(x, y, 0);
